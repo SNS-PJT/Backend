@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -22,29 +23,31 @@ public class Image extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "post_id")
     private Post post;
 
-    @Column(nullable = false, length = 200)
-    private String image_path;
+    @Column(nullable = false, length = 200, name = "image_path")
+    @Getter
+    private String imagePath;
 
     @Builder
-    private Image(Post post, String image_path) {
+    private Image(Post post, String imagePath) {
         this.post = post;
-        this.image_path = image_path;
+        this.imagePath = imagePath;
     }
 
-    public static List<Image> createImages(Post post, List<String> image_paths) {
-        return image_paths.stream()
-                          .map(path -> {
-                              return Image.builder()
-                                          .post(post)
-                                          .image_path(path)
-                                          .build();
-                          })
-                          .toList();
+    public static List<Image> createImages(Post post, List<String> imagePaths) {
+        return imagePaths.stream()
+                         .map(path -> {
+                             return Image.builder()
+                                         .post(post)
+                                         .imagePath(path)
+                                         .build();
+                         })
+                         .toList();
     }
 }

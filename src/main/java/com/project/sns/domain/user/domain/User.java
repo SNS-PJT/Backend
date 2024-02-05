@@ -36,6 +36,7 @@ public class User extends BaseEntity {
     private String oauthId;
 
     @Column(nullable = false, length = 30, unique = true)
+    @Getter
     private String nickname;
 
     @Column(nullable = false, length = 30)
@@ -49,6 +50,7 @@ public class User extends BaseEntity {
     private Gender gender;
 
     @Column(length = 200)
+    @Getter
     private String profilePath;
 
     @Column(nullable = false, length = 100)
@@ -96,7 +98,7 @@ public class User extends BaseEntity {
         List<UserKeyword> userKeywords = UserKeyword.createUserKeywords(this, keywords);
         this.userKeywords.addAll(userKeywords);
     }
-    
+
     @PrePersist
     private void setDefaultValues() {
         this.isDeleted = this.isDeleted != null && this.isDeleted;
