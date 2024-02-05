@@ -41,7 +41,7 @@ public class PostApi {
 
     @GetMapping
     public ResponseEntity<?> searchPostsByUserId(Long userId) {
-        List<PostResponseDto> posts = postSearchUseCase.searchMyPosts(authUser);
+        List<PostResponseDto> posts = postSearchUseCase.searchPostsByUserId(userId);
         return HttpResponseDto.okWithData(HttpStatus.OK, "내 게시글을 조회했습니다.", posts);
     }
 }
