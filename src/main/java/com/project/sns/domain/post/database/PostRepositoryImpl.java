@@ -22,4 +22,9 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> findAllByUser(User user) {
         return jpaPostRepository.findAllByUser(user);
     }
+
+    @Override
+    public List<Post> findAllByKeyword(String keyword) {
+        return jpaPostRepository.findAllByContentLike(keyword);
+    }
 }

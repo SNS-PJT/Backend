@@ -41,6 +41,16 @@ public class PostSearchUseCase {
                     .toList();
     }
 
+    public List<PostResponseDto> searchPostByKeyword(String keyword) {
+
+        // 성능 체크
+        List<Post> posts = postRepository.findAllByKeyword(keyword);
+
+        return posts.stream()
+                    .map(PostResponseDto::from)
+                    .toList();
+    }
+
     private User searchUser(Long userId) {
         return userRepository.findById(userId)
                              .orElseThrow(() -> new NotFoundException(
