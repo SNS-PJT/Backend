@@ -33,8 +33,14 @@ public class PostApi {
         return HttpResponseDto.ok(HttpStatus.CREATED, "게시글을 업로드했습니다.");
     }
 
-    @GetMapping
+    @GetMapping("/my")
     public ResponseEntity<?> searchMyPosts(AuthUser authUser) {
+        List<PostResponseDto> posts = postSearchUseCase.searchMyPosts(authUser);
+        return HttpResponseDto.okWithData(HttpStatus.OK, "내 게시글을 조회했습니다.", posts);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> searchPostsByUserId(Long userId) {
         List<PostResponseDto> posts = postSearchUseCase.searchMyPosts(authUser);
         return HttpResponseDto.okWithData(HttpStatus.OK, "내 게시글을 조회했습니다.", posts);
     }

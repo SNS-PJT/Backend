@@ -21,10 +21,7 @@ public class PostSearchUseCase {
     private final UserRepository userRepository;
 
     public List<PostResponseDto> searchMyPosts(AuthUser authUser) {
-        User loginUser = userRepository.findById(authUser.getUserId())
-                                       .orElseThrow(
-                                               () -> new NotFoundException(
-                                                       "아이디에 해당하는 사용자를 찾을 수 없습니다."));
+        User loginUser = searchUser(authUser.getUserId());
 
         // 성능 체크
         List<Post> posts = postRepository.findAllByUser(loginUser);
@@ -32,5 +29,22 @@ public class PostSearchUseCase {
         return posts.stream()
                     .map(PostResponseDto::from)
                     .toList();
+    }
+
+    public List<PostResponseDto> searchPostsByUserId(Long userId) {
+        User searchedUser = searchUser(userId);
+        // 성능 체크
+        List<Post> posts = postRepository.findAllByUser(searchedUser);
+
+        return posts.stream()
+                    .map(PostResponseDto::from)
+                    .toList();
+    }
+
+    private User searchUser(Long userId) {
+        return userRepository.findById(userId)
+                             .orElseThrow(() -> new NotFoundException(
+                                     "아이디에 해당하는 사용자를 찾을 수 없습니다."));
+
     }
 }
