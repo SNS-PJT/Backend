@@ -9,6 +9,7 @@ import com.project.sns.domain.post.dto.PostCreateRequestDto;
 import com.project.sns.domain.user.application.repository.UserRepository;
 import com.project.sns.domain.user.domain.User;
 import com.project.sns.global.config.webmvc.AuthUser;
+import com.project.sns.global.exception.NotUploadFileException;
 import com.project.sns.infra.aws.S3Uploader;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -47,7 +48,7 @@ public class PostCreateUseCase {
 
     private List<Image> saveImages(List<MultipartFile> images, Post savedPost) {
         if (images == null || images.isEmpty()) {
-            return null;
+            throw new NotUploadFileException("파일을 하나 이상 업로드 해주세요.");
         }
         // S3 이미지 업로드
         List<String> imagePaths = images.stream()

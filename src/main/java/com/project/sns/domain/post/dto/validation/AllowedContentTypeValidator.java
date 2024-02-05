@@ -1,5 +1,6 @@
 package com.project.sns.domain.post.dto.validation;
 
+import com.project.sns.global.exception.NotUploadFileException;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class AllowedContentTypeValidator implements
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
         if (multipartFile == null || multipartFile.isEmpty()) {
-            return true;
+            throw new NotUploadFileException("파일을 하나 이상 업로드 해주세요.");
         }
         return isAllowedType(multipartFile) && isAllowedExtension(multipartFile);
     }
