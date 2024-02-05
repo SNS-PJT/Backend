@@ -10,5 +10,7 @@ public interface PostRepository {
 
     List<Post> findAllByUser(User user);
 
+    List<Post> findAllByKeyword(String keyword);
+
 
 }

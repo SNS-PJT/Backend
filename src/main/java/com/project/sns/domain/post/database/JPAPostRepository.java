@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface JPAPostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findAllByUser(User user);
+
+    List<Post> findAllByContentLike(String keyword);
 }
