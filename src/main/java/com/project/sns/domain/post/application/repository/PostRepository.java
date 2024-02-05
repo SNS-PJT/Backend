@@ -9,5 +9,6 @@ public interface PostRepository {
     Post save(Post post);
 
     List<Post> findAllByUser(User user);
-    
+
+
 }
