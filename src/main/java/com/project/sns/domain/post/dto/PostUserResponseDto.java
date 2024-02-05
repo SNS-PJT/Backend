@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PostUserResponseDto {
 
+    private static String IMAGE_DIRECTORY = "https://sns-pjt.s3.ap-northeast-2.amazonaws.com/";
+
     private Long id;
     private String nickname;
     private String profilePath;
@@ -26,7 +28,7 @@ public class PostUserResponseDto {
         return PostUserResponseDto.builder()
                                   .id(user.getId())
                                   .nickname(user.getNickname())
-                                  .profilePath(user.getProfilePath())
+                                  .profilePath(IMAGE_DIRECTORY + user.getProfilePath())
                                   .build();
     }
 }

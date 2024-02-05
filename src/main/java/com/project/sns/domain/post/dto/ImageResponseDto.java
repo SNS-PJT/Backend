@@ -5,15 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class ImageResponseDto {
 
-    @Value("${cloud.aws.s3.url}")
-    private static String IMAGE_DIRECTORY;
+    private static String IMAGE_DIRECTORY = "https://sns-pjt.s3.ap-northeast-2.amazonaws.com/";
 
     private Long imageId;
     private String imagePath;

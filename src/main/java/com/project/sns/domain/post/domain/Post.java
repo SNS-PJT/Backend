@@ -45,11 +45,9 @@ public class Post extends BaseEntity {
     private List<Image> images = new ArrayList<>();
 
     @Builder
-    public Post(User user, String content,
-            List<Image> images) {
+    public Post(User user, String content) {
         this.user = user;
         this.content = content;
-        this.images = images;
     }
 
     public static Post createPost(User user, String content) {
