@@ -45,13 +45,13 @@ public class PostApi {
     @GetMapping("/{user_id}")
     public ResponseEntity<?> searchPostsByUserId(@PathVariable("user_id") @Min(1) Long userId) {
         List<PostResponseDto> posts = postSearchUseCase.searchPostsByUserId(userId);
-        return HttpResponseDto.okWithData(HttpStatus.OK, "내 게시글을 조회했습니다.", posts);
+        return HttpResponseDto.okWithData(HttpStatus.OK, userId + "님의 게시글을 조회했습니다.", posts);
     }
 
     @GetMapping("/search")
     public ResponseEntity<?> searchByKeyword(
             @RequestParam(name = "keyword", required = true) String keyword) {
         List<PostResponseDto> posts = postSearchUseCase.searchPostByKeyword(keyword);
-        return HttpResponseDto.okWithData(HttpStatus.OK, "내 게시글을 조회했습니다.", posts);
+        return HttpResponseDto.okWithData(HttpStatus.OK, keyword + " 검색 결과입니다.", posts);
     }
 }

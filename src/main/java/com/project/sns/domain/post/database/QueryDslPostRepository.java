@@ -1,4 +1,4 @@
-package com.project.sns.domain.user.infra.database;
+package com.project.sns.domain.post.database;
 
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.post.domain.QImage;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class QueryUserRepository {
+public class QueryDslPostRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -21,10 +21,13 @@ public class QueryUserRepository {
     private QImage image = QImage.image;
 
     public List<Post> findAllByKeyword(String keyword) {
-        return jpaQueryFactory.selectFrom(post)
+        return jpaQueryFactory.select(post)
+                              .from(post)
                               .distinct()
                               .innerJoin(post.user, user)
-                              .innerJoin(image)
+                              .fetchJoin()
+                              .innerJoin(post.images,
+                                      image)
                               .fetchJoin()
                               .where(contentLikeKeyword(keyword))
                               .fetch();
@@ -34,7 +37,7 @@ public class QueryUserRepository {
         if (keyword == null) {
             return null;
         }
-        return post.content.like(keyword);
+        return post.content.contains(keyword);
 
     }
 }

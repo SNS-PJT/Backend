@@ -12,8 +12,10 @@ import org.springframework.stereotype.Repository;
 public class PostRepositoryImpl implements PostRepository {
 
     private final JPAPostRepository jpaPostRepository;
+    private final QueryDslPostRepository queryDslPostRepository;
 
     @Override
+
     public Post save(Post post) {
         return jpaPostRepository.save(post);
     }
@@ -25,6 +27,6 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public List<Post> findAllByKeyword(String keyword) {
-        return jpaPostRepository.findAllByContentLike(keyword);
+        return queryDslPostRepository.findAllByKeyword(keyword);
     }
 }
