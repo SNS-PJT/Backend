@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,9 +27,10 @@ public class PostCreateUseCase {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
-
     private final S3Uploader s3Uploader;
 
+    @Value("${cloud.aws.s3.url}")
+    private String s3Url;
     private final String DIRECTORY = "post/image/";
 
     public void createPost(AuthUser authUser, PostCreateRequestDto postCreateDto) {
@@ -52,7 +54,7 @@ public class PostCreateUseCase {
         }
         // S3 이미지 업로드
         List<String> imagePaths = images.stream()
-                                        .map(image -> s3Uploader.upload(DIRECTORY, image))
+                                        .map(image -> s3Url + s3Uploader.upload(DIRECTORY, image))
                                         .collect(Collectors.toList());
 
         List<Image> newImages = Image.createImages(savedPost, imagePaths);
