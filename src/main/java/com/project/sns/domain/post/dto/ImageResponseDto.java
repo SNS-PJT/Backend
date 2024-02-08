@@ -10,9 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ImageResponseDto {
-
-    private static String IMAGE_DIRECTORY = "https://sns-pjt.s3.ap-northeast-2.amazonaws.com/";
-
+    
     private Long imageId;
     private String imagePath;
 
@@ -25,7 +23,7 @@ public class ImageResponseDto {
     public static ImageResponseDto from(Image image) {
         return ImageResponseDto.builder()
                                .imageId(image.getId())
-                               .imagePath(IMAGE_DIRECTORY + image.getImagePath())
+                               .imagePath(image.getImagePath())
                                .build();
     }
 }
