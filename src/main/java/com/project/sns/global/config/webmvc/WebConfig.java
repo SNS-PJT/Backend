@@ -13,7 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 // 향후 도메인 주소 추가 예정
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("POST", "GET", "DELETE", "PATCH", "OPTIONS");
+                .allowedOrigins("http://localhost:5173")
+                .allowedMethods("POST", "GET", "DELETE", "PATCH", "OPTIONS")
+                .maxAge(3600);
     }
 }
