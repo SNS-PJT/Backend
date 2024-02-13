@@ -15,7 +15,6 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,8 +28,6 @@ public class PostCreateUseCase {
     private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
 
-    @Value("${cloud.aws.s3.url}")
-    private String s3Url;
     private final String DIRECTORY = "post/image/";
 
     public void createPost(AuthUser authUser, PostCreateRequestDto postCreateDto) {
@@ -45,19 +42,22 @@ public class PostCreateUseCase {
 
         if (savedImages != null) {
             savedPost.addImages(savedImages);
+            savedImages.forEach(
+                    image -> s3Uploader.upload(image.getImagePath(), image.getImageFile()));
         }
+
     }
 
     private List<Image> saveImages(List<MultipartFile> images, Post savedPost) {
         if (images == null || images.isEmpty()) {
             throw new NotUploadFileException("파일을 하나 이상 업로드 해주세요.");
         }
-        // S3 이미지 업로드
-        List<String> imagePaths = images.stream()
-                                        .map(image -> s3Url + s3Uploader.upload(DIRECTORY, image))
-                                        .collect(Collectors.toList());
 
-        List<Image> newImages = Image.createImages(savedPost, imagePaths);
+        List<Image> newImages = images.stream()
+                                      .map(image -> Image.createImage(savedPost,
+                                              s3Uploader.makeFileName(DIRECTORY,
+                                                      image), image))
+                                      .collect(Collectors.toList());
 
         return imageRepository.savedAll(newImages);
     }

@@ -23,13 +23,11 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(String directory, MultipartFile multipartFile) {
+    public void upload(String fileName, MultipartFile multipartFile) {
 
         if (multipartFile == null || multipartFile.isEmpty()) {
-            return null;
+            return;
         }
-        String fileName = makeFileName(directory, multipartFile);
-
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(multipartFile.getSize());
         objectMetadata.setContentType(multipartFile.getContentType());
@@ -41,10 +39,9 @@ public class S3Uploader {
             throw new S3UploadFailException("S3 업로드에 실패했습니다.");
         }
 
-        return fileName;
     }
 
-    private String makeFileName(String directory, MultipartFile multipartFile) {
+    public String makeFileName(String directory, MultipartFile multipartFile) {
         if (multipartFile == null) {
             return null;
         }
