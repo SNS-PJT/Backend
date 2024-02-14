@@ -3,6 +3,7 @@ package com.project.sns.domain.post.application;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import com.project.sns.domain.post.application.repository.ImageRepository;
 import com.project.sns.domain.post.application.repository.PostRepository;
 import com.project.sns.domain.post.domain.Image;
 import com.project.sns.domain.post.domain.Post;
@@ -30,6 +31,8 @@ public class PostCreateUseCaseTest {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private ImageRepository imageRepository;
     @Mock
     private ImageDomainService imageService;
     @Mock
