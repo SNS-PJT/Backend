@@ -124,6 +124,7 @@ public class CommentAddUseCaseTest {
     }
 
     @DisplayName("존재하지 않는 사용자는 댓글을 작성할 수 없다.")
+    @Test
     void addComment_NotValidUser_ExceptionThrown() {
         // given
         final User user = UserBuilder.createUser(-1L, "testUser");
@@ -144,6 +145,7 @@ public class CommentAddUseCaseTest {
                                                                    .isEqualTo(404);
 
         verify(postRepository, times(1)).findById(anyLong());
+        verify(userRepository, times(1)).findById(anyLong());
 
     }
 }
