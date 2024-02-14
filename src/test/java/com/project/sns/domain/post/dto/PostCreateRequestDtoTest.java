@@ -30,19 +30,6 @@ public class PostCreateRequestDtoTest {
         validator = validatorFactory.getValidator();
     }
 
-    private PostCreateRequestDto buildRequest() throws IOException {
-        PostCreateRequestDto requestDto = new PostCreateRequestDto();
-        MockMultipartFile image = new MockMultipartFile("image-name", "test.png", "image/png",
-                new FileInputStream("src/test/resources/sample-image.png"));
-
-        List<MultipartFile> images = new ArrayList<>();
-        images.add(image);
-
-        requestDto.setImages(images);
-
-        return requestDto;
-    }
-
     @DisplayName("게시글 업로드 요청 시 게시글 내용이 반드시 있어야 한다.")
     @Test
     void blackContentThrowsException() throws IOException {

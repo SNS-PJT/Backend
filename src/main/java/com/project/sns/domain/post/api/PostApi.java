@@ -1,7 +1,7 @@
 package com.project.sns.domain.post.api;
 
-import com.project.sns.domain.post.application.PostCreateUseCase;
 import com.project.sns.domain.post.application.PostSearchUseCase;
+import com.project.sns.domain.post.application.PostUploadUseCase;
 import com.project.sns.domain.post.dto.PostCreateRequestDto;
 import com.project.sns.domain.post.dto.PostResponseDto;
 import com.project.sns.global.config.webmvc.AuthUser;
@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PostApi {
 
-    private final PostCreateUseCase postCreateUseCase;
+    private final PostUploadUseCase postCreateUseCase;
     private final PostSearchUseCase postSearchUseCase;
 
 
     @PostMapping
     public ResponseEntity<?> uploadPost(AuthUser authUser,
             @RequestBody @Valid PostCreateRequestDto postCreateRequestDto) {
-        postCreateUseCase.createPost(authUser, postCreateRequestDto);
+        postCreateUseCase.uploadPost(authUser, postCreateRequestDto);
         return HttpResponseDto.ok(HttpStatus.CREATED, "게시글을 업로드했습니다.");
     }
 
