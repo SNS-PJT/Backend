@@ -1,9 +1,10 @@
-package com.project.sns.domain.comment.domain;
+package com.project.sns.unit.comment.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.project.sns.common.UserBuilder;
+import com.project.sns.domain.comment.domain.Comment;
 import com.project.sns.domain.user.domain.User;
 import com.project.sns.global.exception.NotValidCommentContentException;
 import org.junit.jupiter.api.DisplayName;
