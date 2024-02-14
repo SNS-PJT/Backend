@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Transactional
 public class PostModifyUseCase {
-    
+
     private final PostRepository postRepository;
 
 }

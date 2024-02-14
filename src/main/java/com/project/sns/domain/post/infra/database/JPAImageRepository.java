@@ -1,4 +1,4 @@
-package com.project.sns.domain.post.database;
+package com.project.sns.domain.post.infra.database;
 
 import com.project.sns.domain.post.domain.Image;
 import org.springframework.data.jpa.repository.JpaRepository;

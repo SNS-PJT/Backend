@@ -1,4 +1,4 @@
-package com.project.sns.domain.post.database;
+package com.project.sns.domain.post.infra.database;
 
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.user.domain.User;

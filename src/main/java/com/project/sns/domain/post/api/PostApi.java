@@ -1,7 +1,7 @@
 package com.project.sns.domain.post.api;
 
-import com.project.sns.domain.post.application.PostCreateUseCase;
 import com.project.sns.domain.post.application.PostSearchUseCase;
+import com.project.sns.domain.post.application.PostUploadUseCase;
 import com.project.sns.domain.post.dto.PostCreateRequestDto;
 import com.project.sns.domain.post.dto.PostResponseDto;
 import com.project.sns.global.config.webmvc.AuthUser;
@@ -13,9 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PostApi {
 
-    private final PostCreateUseCase postCreateUseCase;
+    private final PostUploadUseCase postCreateUseCase;
     private final PostSearchUseCase postSearchUseCase;
 
 
     @PostMapping
     public ResponseEntity<?> uploadPost(AuthUser authUser,
-            @ModelAttribute @Valid PostCreateRequestDto postCreateRequestDto) {
-        postCreateUseCase.createPost(authUser, postCreateRequestDto);
+            @RequestBody @Valid PostCreateRequestDto postCreateRequestDto) {
+        postCreateUseCase.uploadPost(authUser, postCreateRequestDto);
         return HttpResponseDto.ok(HttpStatus.CREATED, "게시글을 업로드했습니다.");
     }
 
