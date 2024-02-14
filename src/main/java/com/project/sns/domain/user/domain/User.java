@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,8 +70,12 @@ public class User extends BaseEntity {
     private List<UserKeyword> userKeywords = new ArrayList<>();
 
     @Builder
-    private User(String oauthId, String nickname, String email, LocalDate birth, Gender gender,
-            String profilePath, String profileMessage) {
+    private User(Long id, String oauthId, String nickname, String email, LocalDate birth,
+            Gender gender,
+            String profilePath, String profileMessage, Boolean isDeleted,
+            LocalDateTime lastUploadDate,
+            String refreshToken, List<UserKeyword> userKeywords) {
+        this.id = id;
         this.oauthId = oauthId;
         this.nickname = nickname;
         this.email = email;
@@ -78,7 +83,12 @@ public class User extends BaseEntity {
         this.gender = gender;
         this.profilePath = profilePath;
         this.profileMessage = profileMessage;
+        this.isDeleted = isDeleted;
+        this.lastUploadDate = lastUploadDate;
+        this.refreshToken = refreshToken;
+        this.userKeywords = userKeywords;
     }
+
 
     public static User createUser(String oauthId, String nickname, String email, LocalDate birth,
             Gender gender,
@@ -104,4 +114,21 @@ public class User extends BaseEntity {
         this.isDeleted = this.isDeleted != null && this.isDeleted;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(id, user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
