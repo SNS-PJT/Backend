@@ -11,12 +11,13 @@ import static org.mockito.Mockito.verify;
 import com.project.sns.common.UserBuilder;
 import com.project.sns.domain.comment.application.CommentAddUseCase;
 import com.project.sns.domain.comment.application.repository.CommentRepository;
-import com.project.sns.domain.comment.application.request.CommentAddRequestDto;
 import com.project.sns.domain.comment.domain.Comment;
+import com.project.sns.domain.comment.dto.CommentAddRequestDto;
 import com.project.sns.domain.post.application.repository.PostRepository;
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.user.application.repository.UserRepository;
 import com.project.sns.domain.user.domain.User;
+import com.project.sns.global.config.webmvc.AuthUser;
 import com.project.sns.global.exception.NotFoundException;
 import com.project.sns.global.exception.NotValidCommentContentException;
 import java.util.Optional;
@@ -50,6 +51,8 @@ public class CommentAddUseCaseTest {
         final String content = "댓글 내용";
 
         final User user = UserBuilder.createUser(1L, "testUser");
+        final AuthUser loginUser = UserBuilder.createAuthUser(user.getId());
+
         final Post post = Post.builder()
                               .id(1L)
                               .user(user)
@@ -57,7 +60,7 @@ public class CommentAddUseCaseTest {
 
         final Comment comment = Comment.createComment(post, user, content);
 
-        final CommentAddRequestDto request = new CommentAddRequestDto(1L, 1L, "댓글 내용");
+        final CommentAddRequestDto request = new CommentAddRequestDto(post.getId(), "댓글 내용");
 
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
@@ -66,7 +69,8 @@ public class CommentAddUseCaseTest {
         // when, then
         assertThat(comment.getAuthorName()).isEqualTo(user.getNickname());
 
-        assertThatCode(() -> commentAddUseCase.addComment(request)).doesNotThrowAnyException();
+        assertThatCode(
+                () -> commentAddUseCase.addComment(loginUser, request)).doesNotThrowAnyException();
 
         verify(commentRepository, times(1)).save(any(Comment.class));
         verify(userRepository, times(1)).findById(anyLong());
@@ -80,6 +84,8 @@ public class CommentAddUseCaseTest {
     void addComment_ContentIsNullOrEmpty_ExceptionThrown(String content) {
         // given
         final User user = UserBuilder.createUser(1L, "testUser");
+        final AuthUser loginUser = UserBuilder.createAuthUser(user.getId());
+
         final Post post = Post.builder()
                               .id(1L)
                               .build();
@@ -87,14 +93,15 @@ public class CommentAddUseCaseTest {
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
 
-        final CommentAddRequestDto request = new CommentAddRequestDto(user.getId(), post.getId(),
+        final CommentAddRequestDto request = new CommentAddRequestDto(post.getId(),
                 content);
 
         // when, then
-        assertThatCode(() -> commentAddUseCase.addComment(request)).isInstanceOf(
-                                                                           NotValidCommentContentException.class)
-                                                                   .extracting("statusCode")
-                                                                   .isEqualTo(400);
+        assertThatCode(() -> commentAddUseCase.addComment(loginUser, request)).isInstanceOf(
+                                                                                      NotValidCommentContentException.class)
+                                                                              .extracting(
+                                                                                      "statusCode")
+                                                                              .isEqualTo(400);
 
         verify(commentRepository, times(0)).save(any(Comment.class));
         verify(userRepository, times(1)).findById(anyLong());
@@ -106,18 +113,20 @@ public class CommentAddUseCaseTest {
     @Test
     void addComment_NotValidPost_ExceptionThrown() {
         // given
-        final User user = UserBuilder.createUser(1L, "testUser");
+        final AuthUser loginUser = UserBuilder.createAuthUser(1L);
+
         final Long postId = -1L;
         final String content = "test comment";
 
-        final CommentAddRequestDto request = new CommentAddRequestDto(user.getId(), postId,
+        final CommentAddRequestDto request = new CommentAddRequestDto(postId,
                 content);
 
         // when, then
-        assertThatCode(() -> commentAddUseCase.addComment(request)).isInstanceOf(
-                                                                           NotFoundException.class)
-                                                                   .extracting("statusCode")
-                                                                   .isEqualTo(404);
+        assertThatCode(() -> commentAddUseCase.addComment(loginUser, request)).isInstanceOf(
+                                                                                      NotFoundException.class)
+                                                                              .extracting(
+                                                                                      "statusCode")
+                                                                              .isEqualTo(404);
 
         verify(postRepository, times(1)).findById(anyLong());
 
@@ -127,22 +136,24 @@ public class CommentAddUseCaseTest {
     @Test
     void addComment_NotValidUser_ExceptionThrown() {
         // given
-        final User user = UserBuilder.createUser(-1L, "testUser");
+        final AuthUser loginUser = UserBuilder.createAuthUser(-1L);
+
         final Post post = Post.builder()
                               .id(1L)
                               .build();
         final String content = "test comment";
 
-        final CommentAddRequestDto request = new CommentAddRequestDto(user.getId(), post.getId(),
+        final CommentAddRequestDto request = new CommentAddRequestDto(post.getId(),
                 content);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
 
         // when, then
-        assertThatCode(() -> commentAddUseCase.addComment(request)).isInstanceOf(
-                                                                           NotFoundException.class)
-                                                                   .extracting("statusCode")
-                                                                   .isEqualTo(404);
+        assertThatCode(() -> commentAddUseCase.addComment(loginUser, request)).isInstanceOf(
+                                                                                      NotFoundException.class)
+                                                                              .extracting(
+                                                                                      "statusCode")
+                                                                              .isEqualTo(404);
 
         verify(postRepository, times(1)).findById(anyLong());
         verify(userRepository, times(1)).findById(anyLong());

@@ -1,12 +1,13 @@
 package com.project.sns.domain.comment.application;
 
 import com.project.sns.domain.comment.application.repository.CommentRepository;
-import com.project.sns.domain.comment.application.request.CommentAddRequestDto;
 import com.project.sns.domain.comment.domain.Comment;
+import com.project.sns.domain.comment.dto.CommentAddRequestDto;
 import com.project.sns.domain.post.application.repository.PostRepository;
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.user.application.repository.UserRepository;
 import com.project.sns.domain.user.domain.User;
+import com.project.sns.global.config.webmvc.AuthUser;
 import com.project.sns.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,15 @@ public class CommentAddUseCase {
     private final CommentRepository commentRepository;
 
 
-    public void addComment(CommentAddRequestDto request) {
-        Post savedPost = postRepository.findById(request.postId())
+    public void addComment(AuthUser authUser, CommentAddRequestDto request) {
+        Post savedPost = postRepository.findById(request.getPostId())
                                        .orElseThrow(() -> new NotFoundException("존재하지 않는 게시글입니다."));
 
-        User loginUser = userRepository.findById(request.userId())
+        User loginUser = userRepository.findById(authUser.getUserId())
                                        .orElseThrow(() -> new NotFoundException(
                                                "아이디에 해당하는 사용자를 찾을 수 없습니다."));
 
-        Comment newComment = Comment.createComment(savedPost, loginUser, request.content());
+        Comment newComment = Comment.createComment(savedPost, loginUser, request.getContent());
 
         commentRepository.save(newComment);
     }
