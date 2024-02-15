@@ -9,9 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 class CommentAddRequestBody {
 
-    Long userId;
-    Long postId;
-    String content;
+    private Long userId;
+    private Long postId;
+    private String content;
 
     public CommentAddRequestBody(Long userId, Long postId, String content) {
         this.userId = userId;
