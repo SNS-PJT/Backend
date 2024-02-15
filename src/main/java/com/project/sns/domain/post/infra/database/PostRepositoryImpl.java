@@ -4,6 +4,7 @@ import com.project.sns.domain.post.application.repository.PostRepository;
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.user.domain.User;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -26,5 +27,10 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<Post> findAllByKeyword(String keyword) {
         return jpaPostRepository.findAllByContentLike(keyword);
+    }
+
+    @Override
+    public Optional<Post> findById(Long id) {
+        return Optional.empty();
     }
 }

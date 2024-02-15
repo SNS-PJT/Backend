@@ -1,6 +1,5 @@
 package com.project.sns.domain.post.application;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.project.sns.domain.post.application.repository.ImageRepository;
 import com.project.sns.domain.post.application.repository.PostRepository;
 import com.project.sns.domain.post.domain.Image;
@@ -10,6 +9,7 @@ import com.project.sns.domain.post.dto.PostCreateRequestDto;
 import com.project.sns.domain.user.application.repository.UserRepository;
 import com.project.sns.domain.user.domain.User;
 import com.project.sns.global.config.webmvc.AuthUser;
+import com.project.sns.global.exception.NotFoundException;
 import com.project.sns.infra.aws.S3Uploader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

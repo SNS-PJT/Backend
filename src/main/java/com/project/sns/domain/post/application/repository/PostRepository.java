@@ -3,6 +3,7 @@ package com.project.sns.domain.post.application.repository;
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.user.domain.User;
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository {
 
@@ -13,4 +14,5 @@ public interface PostRepository {
     List<Post> findAllByKeyword(String keyword);
 
 
+    Optional<Post> findById(Long id);
 }
