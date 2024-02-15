@@ -1,4 +1,4 @@
-package com.project.sns.common;
+package com.project.sns.common.user;
 
 import com.project.sns.domain.user.domain.User;
 import lombok.AccessLevel;

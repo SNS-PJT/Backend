@@ -20,6 +20,10 @@ public class CommentContent {
 
 
     public CommentContent(String content) {
+        this.setContent(content);
+    }
+
+    protected void setContent(String content) {
         if (isNotValidContent(content)) {
             throw new NotValidCommentContentException("댓글 양식을 준수하지 않는 댓글입니다.");
         }
@@ -28,8 +32,9 @@ public class CommentContent {
 
     private boolean isNotValidContent(String content) {
         return Objects.isNull(content) || content.isBlank()
-                || content.length() >= MAX_COMMNET_LENGTH;
+                || content.length() > MAX_COMMNET_LENGTH;
     }
+
 
     @Override
     public boolean equals(Object o) {

@@ -3,10 +3,11 @@ package com.project.sns.unit.comment.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import com.project.sns.common.UserBuilder;
+import com.project.sns.common.user.UserBuilder;
 import com.project.sns.domain.comment.domain.Comment;
 import com.project.sns.domain.user.domain.User;
 import com.project.sns.global.exception.NotValidCommentContentException;
+import com.project.sns.global.exception.NotValidUserException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -65,4 +66,53 @@ public class CommentTest {
         assertThat(comment.isCommentedBy(currentUser)).isTrue();
     }
 
+    @DisplayName("댓글을 수정할 수 있다.")
+    @Test
+    void modifyComment_ValidContent_Success() {
+        // given
+        User author = UserBuilder.createUser(1L, "닉네임");
+        Comment comment = Comment.createComment(null, author, "test content");
+
+        // when
+        String modifyContent = "modify_Content";
+        comment.modifyContent(author, modifyContent);
+
+        // then
+        assertThat(comment.getContent()).isEqualTo(modifyContent);
+    }
+
+    @DisplayName("댓글을 수정하려는 유저가 작성자와 동일하지 않으면 댓글을 수정할 수 없다.")
+    @Test
+    void modifyComment_isNotCommentedByCurrentUser_ExceptionThrown() {
+        // given
+        User author = UserBuilder.createUser(1L, "닉네임1");
+        User currentUser = UserBuilder.createUser(2L, "닉네임2");
+        Comment comment = Comment.createComment(null, author, "test content");
+
+        String modifyContent = "modify_Content";
+
+        // when, then
+        assertThat(author).isNotEqualTo(currentUser);
+        assertThatCode(() -> comment.modifyContent(currentUser, modifyContent)).isInstanceOf(
+                                                                                       NotValidUserException.class)
+                                                                               .extracting(
+                                                                                       "statusCode")
+                                                                               .isEqualTo(403);
+    }
+
+    @DisplayName("댓글 내용이 null이거나 빈 문자열이면 댓글을 수정할 수 없다.")
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"", " "})
+    void modifyComment_ContentIsNullOrEmpty_ExceptionThrown(String content) {
+        // given
+        User author = UserBuilder.createUser(1L, "닉네임1");
+        Comment comment = Comment.createComment(null, author, "test content");
+
+        // when, then
+        assertThatCode(() -> comment.modifyContent(author, content)).isInstanceOf(
+                                                                            NotValidCommentContentException.class)
+                                                                    .extracting("statusCode")
+                                                                    .isEqualTo(400);
+    }
 }

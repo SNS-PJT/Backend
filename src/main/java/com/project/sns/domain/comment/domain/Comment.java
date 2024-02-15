@@ -3,6 +3,7 @@ package com.project.sns.domain.comment.domain;
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.user.domain.User;
 import com.project.sns.global.entity.BaseEntity;
+import com.project.sns.global.exception.NotValidUserException;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -65,8 +66,19 @@ public class Comment extends BaseEntity {
         return user.getNickname();
     }
 
+    public String getContent() {
+        return this.content.getContent();
+    }
+
     public boolean isCommentedBy(User user) {
         return this.user.equals(user);
+    }
+
+    public void modifyContent(User user, String content) {
+        if (!isCommentedBy(user)) {
+            throw new NotValidUserException("댓글의 작성자와 동일하지 않습니다.");
+        }
+        this.content.setContent(content);
     }
 
     @Override
