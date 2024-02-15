@@ -32,7 +32,7 @@ public class CommentContent {
 
     private boolean isNotValidContent(String content) {
         return Objects.isNull(content) || content.isBlank()
-                || content.length() >= MAX_COMMNET_LENGTH;
+                || content.length() > MAX_COMMNET_LENGTH;
     }
 
 

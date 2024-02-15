@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.project.sns.common.UserBuilder;
+import com.project.sns.common.user.UserBuilder;
 import com.project.sns.domain.comment.application.CommentAddUseCase;
 import com.project.sns.domain.comment.application.repository.CommentRepository;
 import com.project.sns.domain.comment.domain.Comment;
