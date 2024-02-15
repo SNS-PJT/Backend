@@ -81,7 +81,8 @@ public class CommentModifyUseCaseTest {
                 requestedCommentId,
                 modifyContent);
 
-        given(commentRepository.findById(modifyRequestDto.getId())).willReturn(Optional.empty());
+        given(commentRepository.findById(modifyRequestDto.getCommentId())).willReturn(
+                Optional.empty());
 
         // when, then
         assertThatCode(
@@ -110,7 +111,7 @@ public class CommentModifyUseCaseTest {
         final Comment comment = Comment.builder()
                                        .build();
 
-        given(commentRepository.findById(modifyRequestDto.getId())).willReturn(
+        given(commentRepository.findById(modifyRequestDto.getCommentId())).willReturn(
                 Optional.of(comment));
         given(userRepository.findById(anyLong())).willReturn(Optional.empty());
 

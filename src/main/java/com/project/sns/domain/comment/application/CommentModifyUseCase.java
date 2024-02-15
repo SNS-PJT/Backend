@@ -20,7 +20,7 @@ public class CommentModifyUseCase {
     private final UserRepository userRepository;
 
     public void modifyComment(AuthUser authUser, CommentModifyRequestDto modifyRequestDto) {
-        Comment savedComment = commentRepository.findById(modifyRequestDto.getId())
+        Comment savedComment = commentRepository.findById(modifyRequestDto.getCommentId())
                                                 .orElseThrow(() -> new NotFoundException(
                                                         "댓글 번호에 해당하는 댓글을 찾을 수 없습니다."));
 

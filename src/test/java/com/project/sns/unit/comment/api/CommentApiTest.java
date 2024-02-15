@@ -1,12 +1,15 @@
 package com.project.sns.unit.comment.api;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.sns.domain.comment.api.CommentApi;
 import com.project.sns.domain.comment.application.CommentAddUseCase;
+import com.project.sns.domain.comment.application.CommentModifyUseCase;
 import com.project.sns.domain.comment.dto.CommentAddRequestDto;
+import com.project.sns.domain.comment.dto.CommentModifyRequestDto;
 import com.project.sns.global.config.webmvc.AuthUser;
 import com.project.sns.unit.ApiTest;
 import org.junit.jupiter.api.Test;
@@ -27,7 +30,11 @@ class CommentApiTest extends ApiTest {
 
     @MockBean
     CommentAddUseCase commentAddUseCase;
-    private static String BASE_URL = "api/comments";
+
+    @MockBean
+    CommentModifyUseCase commentModifyUseCase;
+
+    private static String BASE_URL = "/api/comments";
 
     @Test
     void addComment_ValidRequest_Success() throws Exception {
@@ -43,9 +50,30 @@ class CommentApiTest extends ApiTest {
         String requestBody = objectMapper.writeValueAsString(requestBodyObject);
 
         // when, then
-        mockMvc.perform(post("/api/comments").contentType(MediaType.APPLICATION_JSON)
-                                             .content(requestBody))
+        mockMvc.perform(post(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+                                      .content(requestBody))
                .andExpect(status().isCreated());
+
+    }
+
+
+    @Test
+    void modifyComment_ValidRequest_Success() throws Exception {
+        // given
+        final AuthUser authUser = new AuthUser(1L);
+        final CommentModifyRequestDto commentModifyRequestDto = new CommentModifyRequestDto(1L,
+                "test content");
+
+        final CommentModifyRequestBody requestBodyObject = new CommentModifyRequestBody(
+                authUser.getUserId(),
+                commentModifyRequestDto.getCommentId(), commentModifyRequestDto.getContent());
+
+        String requestBody = objectMapper.writeValueAsString(requestBodyObject);
+
+        // when, then
+        mockMvc.perform(patch(BASE_URL).contentType(MediaType.APPLICATION_JSON)
+                                       .content(requestBody))
+               .andExpect(status().isOk());
 
     }
 

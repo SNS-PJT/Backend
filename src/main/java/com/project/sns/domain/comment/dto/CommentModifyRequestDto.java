@@ -13,14 +13,14 @@ import org.hibernate.validator.constraints.Length;
 public class CommentModifyRequestDto {
 
     @NotNull
-    private Long id;
+    private Long commentId;
 
     @NotBlank
     @Length(max = 200)
     private String content;
 
-    public CommentModifyRequestDto(Long id, String content) {
-        this.id = id;
+    public CommentModifyRequestDto(Long commentId, String content) {
+        this.commentId = commentId;
         this.content = content;
     }
 }
