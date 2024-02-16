@@ -10,9 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,13 +26,13 @@ public class CommentApi {
 
     @PostMapping
     public ResponseEntity<?> addComment(AuthUser loginUser,
-            @RequestBody @Valid CommentAddRequestDto requestDto) {
+            @ModelAttribute @Valid CommentAddRequestDto requestDto) {
         commentAddUseCase.addComment(loginUser, requestDto);
         return HttpResponseDto.ok(HttpStatus.CREATED, "댓글을 등록했습니다.");
     }
 
     @PatchMapping
-    public ResponseEntity<?> modifyComment(AuthUser loginUser, @RequestBody @Valid
+    public ResponseEntity<?> modifyComment(AuthUser loginUser, @ModelAttribute @Valid
     CommentModifyRequestDto modifyRequestDto) {
         commentModifyUseCase.modifyComment(loginUser, modifyRequestDto);
         return HttpResponseDto.ok(HttpStatus.OK, "댓글을 수정했습니다.");
