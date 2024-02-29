@@ -5,31 +5,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 
 @NoArgsConstructor
+@Getter
+@Setter
 public class ImageResponseDto {
 
-    @Value("${cloud.aws.s3.url}")
-    private String s3Url;
-
-    @Getter
-    @Setter
     private Long imageId;
-    @Getter
-    @Setter
     private String imagePath;
+
+    private static final String s3Url = "https://sns-pjt.s3.ap-northeast-2.amazonaws.com/";
 
     @Builder
     private ImageResponseDto(Long imageId, String imagePath) {
         this.imageId = imageId;
-        this.imagePath = s3Url + imagePath;
+        this.imagePath = imagePath;
     }
 
     public static ImageResponseDto from(Image image) {
         return ImageResponseDto.builder()
                                .imageId(image.getId())
-                               .imagePath(image.getImagePath())
+                               .imagePath(s3Url + image.getImagePath())
                                .build();
     }
 }
