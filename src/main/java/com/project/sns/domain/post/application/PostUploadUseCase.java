@@ -40,7 +40,7 @@ public class PostUploadUseCase {
 
         savedPost.addImages(savedImages);
         savedImages.forEach(
-                image -> s3Uploader.upload(image.getImagePath(), image.getImageFile()));
+                image -> s3Uploader.upload(image.getImageFileName(), image.getImageFile()));
 
     }
 

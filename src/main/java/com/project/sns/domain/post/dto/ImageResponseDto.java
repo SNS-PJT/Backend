@@ -14,8 +14,6 @@ public class ImageResponseDto {
     private Long imageId;
     private String imagePath;
 
-    private static final String s3Url = "https://sns-pjt.s3.ap-northeast-2.amazonaws.com/";
-
     @Builder
     private ImageResponseDto(Long imageId, String imagePath) {
         this.imageId = imageId;
@@ -25,7 +23,7 @@ public class ImageResponseDto {
     public static ImageResponseDto from(Image image) {
         return ImageResponseDto.builder()
                                .imageId(image.getId())
-                               .imagePath(s3Url + image.getImagePath())
+                               .imagePath(image.getImagePath())
                                .build();
     }
 }

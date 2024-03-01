@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Table(name = "image")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image extends BaseEntity {
+
+    private static final String s3Url = "https://sns-pjt.s3.ap-northeast-2.amazonaws.com/";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,31 +39,27 @@ public class Image extends BaseEntity {
 
     @Transient
     @Getter
+    private String imageFileName;
+
+    @Transient
+    @Getter
     private MultipartFile imageFile;
 
     @Builder
-    private Image(Post post, String imagePath, MultipartFile imageFile) {
+    private Image(Post post, String imagePath, String imageFileName, MultipartFile imageFile) {
         this.post = post;
         this.imagePath = imagePath;
+        this.imageFileName = imageFileName;
         this.imageFile = imageFile;
     }
 
-    public static Image createImage(Post post, String imagePath, MultipartFile imageFile) {
+    public static Image createImage(Post post, String imageFileName, MultipartFile imageFile) {
         return Image.builder()
                     .post(post)
-                    .imagePath(imagePath)
+                    .imagePath(s3Url + imageFileName)
+                    .imageFileName(imageFileName)
                     .imageFile(imageFile)
                     .build();
     }
 
-    public static List<Image> createImages(Post post, List<String> imagePaths) {
-        return imagePaths.stream()
-                         .map(path -> {
-                             return Image.builder()
-                                         .post(post)
-                                         .imagePath(path)
-                                         .build();
-                         })
-                         .toList();
-    }
 }
