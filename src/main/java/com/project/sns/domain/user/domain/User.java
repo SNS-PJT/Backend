@@ -1,5 +1,7 @@
 package com.project.sns.domain.user.domain;
 
+import com.project.sns.domain.keyword.domain.Keyword;
+import com.project.sns.domain.user.domain.keyword.UserKeyword;
 import com.project.sns.global.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
