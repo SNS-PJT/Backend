@@ -1,5 +1,7 @@
-package com.project.sns.domain.user.domain;
+package com.project.sns.domain.user.domain.keyword;
 
+import com.project.sns.domain.keyword.domain.Keyword;
+import com.project.sns.domain.user.domain.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

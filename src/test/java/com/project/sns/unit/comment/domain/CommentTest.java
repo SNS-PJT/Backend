@@ -7,7 +7,7 @@ import com.project.sns.common.user.UserBuilder;
 import com.project.sns.domain.comment.domain.Comment;
 import com.project.sns.domain.user.domain.User;
 import com.project.sns.global.exception.NotValidCommentContentException;
-import com.project.sns.global.exception.NotValidUserException;
+import com.project.sns.global.exception.user.NotValidUserException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

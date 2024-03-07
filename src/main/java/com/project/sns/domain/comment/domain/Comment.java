@@ -3,7 +3,7 @@ package com.project.sns.domain.comment.domain;
 import com.project.sns.domain.post.domain.Post;
 import com.project.sns.domain.user.domain.User;
 import com.project.sns.global.entity.BaseEntity;
-import com.project.sns.global.exception.NotValidUserException;
+import com.project.sns.global.exception.user.NotValidUserException;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
