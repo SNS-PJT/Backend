@@ -25,8 +25,15 @@ public class KeywordAddUseCase {
     }
 
     private Keyword getKeywordOrCreateKeyword(String content) {
-        Keyword newKeyword = new Keyword(content);
-        return keywordRepository.findByContent(content)
-                                .orElseGet(() -> keywordRepository.save(newKeyword));
+        Keyword savedKeyword = keywordRepository.findByContent(content)
+                                                .orElse(null);
+
+        if (savedKeyword == null) {
+            return keywordRepository.save(new Keyword(content));
+        }
+        
+        savedKeyword.addKeywordCount();
+
+        return savedKeyword;
     }
 }
