@@ -13,6 +13,8 @@ import com.project.sns.domain.post.dto.PostCreateRequestDtoBuilder;
 import com.project.sns.domain.user.application.repository.UserRepository;
 import com.project.sns.domain.user.domain.Gender;
 import com.project.sns.domain.user.domain.User;
+import com.project.sns.domain.user.domain.oauth.OAuthProfile;
+import com.project.sns.domain.user.domain.oauth.OAuthProvider;
 import com.project.sns.global.config.webmvc.AuthUser;
 import com.project.sns.infra.aws.S3Uploader;
 import java.io.IOException;
@@ -49,7 +51,8 @@ public class PostCreateUseCaseTest {
 
 
     void set_up() {
-        user = User.createUser("oauthId", "nickname", "email", LocalDate.now(), Gender.F,
+        OAuthProfile oAuthProfile = new OAuthProfile(OAuthProvider.KAKAO, "oauthId");
+        user = User.createUser(oAuthProfile, "nickname", "email", LocalDate.now(), Gender.F,
                 "profilePath", "profileImage");
         images = new ArrayList<>();
         post = Post.createPost(user, "내용1");
