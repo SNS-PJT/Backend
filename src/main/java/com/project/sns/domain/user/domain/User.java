@@ -2,9 +2,11 @@ package com.project.sns.domain.user.domain;
 
 import com.project.sns.domain.keyword.domain.Keyword;
 import com.project.sns.domain.user.domain.keyword.UserKeyword;
+import com.project.sns.domain.user.domain.oauth.OAuthProfile;
 import com.project.sns.global.entity.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,9 +36,9 @@ public class User extends BaseEntity {
     @Column(name = "id", updatable = false)
     @Getter
     private Long id;
-
-    @Column(nullable = false, name = "oauth_id", length = 100)
-    private String oauthId;
+    
+    @Embedded
+    private OAuthProfile oAuthProfile;
 
     @Column(nullable = false, length = 30, unique = true)
     @Getter
@@ -72,13 +74,11 @@ public class User extends BaseEntity {
     private List<UserKeyword> userKeywords = new ArrayList<>();
 
     @Builder
-    private User(Long id, String oauthId, String nickname, String email, LocalDate birth,
-            Gender gender,
-            String profilePath, String profileMessage, Boolean isDeleted,
-            LocalDateTime lastUploadDate,
-            String refreshToken, List<UserKeyword> userKeywords) {
+    private User(Long id, OAuthProfile oAuthProfile, String nickname, String email, LocalDate birth,
+            Gender gender, String profilePath, String profileMessage, Boolean isDeleted,
+            LocalDateTime lastUploadDate, String refreshToken, List<UserKeyword> userKeywords) {
         this.id = id;
-        this.oauthId = oauthId;
+        this.oAuthProfile = oAuthProfile;
         this.nickname = nickname;
         this.email = email;
         this.birth = birth;
@@ -92,11 +92,12 @@ public class User extends BaseEntity {
     }
 
 
-    public static User createUser(String oauthId, String nickname, String email, LocalDate birth,
+    public static User createUser(OAuthProfile oAuthProfile, String nickname, String email,
+            LocalDate birth,
             Gender gender,
             String profilePath, String profileMessage) {
         return User.builder()
-                   .oauthId(oauthId)
+                   .oAuthProfile(oAuthProfile)
                    .nickname(nickname)
                    .email(email)
                    .birth(birth)
